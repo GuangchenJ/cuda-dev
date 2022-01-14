@@ -20,7 +20,9 @@ services:
           cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
           # Password is required for SSH connection
           sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
+          # Start the ssh service
           service ssh start
+          # Start jupyter
           jupyter notebook --allow-root
     restart: always
     shm_size: '8gb'
@@ -33,6 +35,14 @@ services:
       net:
         aliases:
           - tf-jupyter
+    deploy:
+      resources:
+        reservations:
+          devices:
+            drivers:
+              - driver: nvidia
+                count: 1
+                capabilities: [ gpu ]
 
 networks:
   net:
