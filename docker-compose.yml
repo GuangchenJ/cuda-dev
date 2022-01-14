@@ -1,0 +1,40 @@
+version: '2.7'
+
+services:
+  tf-jupyter:
+    image: guangchenj/tensorflow:latest-gpu-jupyter
+    container_name: tf-jupyter
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: 
+      - sh
+      - -c
+      - |
+          # change password
+          passwd << EOD
+          ${pwd}
+          ${pwd}
+          EOD
+          # copy the config file
+          cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
+          # Password is required for SSH connection
+          sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
+          service ssh start
+          jupyter notebook --allow-root
+    restart: always
+    shm_size: '8gb'
+    volumes:
+      - "/data:/tf/data"
+    ports:
+      - "8022:22"
+      - "8888:8888"
+    networks:
+      net:
+        aliases:
+          - tf-jupyter
+
+networks:
+  net:
+    driver: bridge
+
