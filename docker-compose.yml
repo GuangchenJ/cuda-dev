@@ -1,12 +1,12 @@
-version: '2.7'
+version: '3.2'
 
 services:
   tf-jupyter:
-    image: guangchenj/tensorflow:latest-gpu-jupyter
-    container_name: tf-jupyter
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+    image: guangchenj/tf-compose:latest-gpu-jupyter
+    container_name: tf-compose
+#    build:
+#      context: .
+#      dockerfile: ./Dockerfile
     command: 
       - sh
       - -c
@@ -23,7 +23,7 @@ services:
           # Start the ssh service
           service ssh start
           # Start jupyter
-          jupyter notebook --allow-root
+          jupyter notebook --allow-root --no-browser --port 8888 --ip=0.0.0.0
     restart: always
     shm_size: '8gb'
     volumes:
@@ -31,17 +31,17 @@ services:
     ports:
       - "8022:22"
       - "8888:8888"
-    networks:
-      net:
-        aliases:
-          - tf-jupyter
     deploy:
       resources:
         reservations:
           devices:
-              - driver: nvidia
-                count: 1
-                capabilities: [ gpu ]
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+    networks:
+      net:
+        aliases:
+          - tf-compose
 
 networks:
   net:
