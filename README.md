@@ -1,7 +1,3 @@
-# docker-compose
-Some docker compose for SSH Configurations in JetBrains
-
-
 <div id="top"></div>
 
 <!-- PROJECT SHIELDS -->
