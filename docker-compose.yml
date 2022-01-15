@@ -2,7 +2,7 @@ version: '3.2'
 
 services:
   tf-jupyter:
-    image: guangchenj/tf-compose:latest-gpu-jupyter
+    image: guangchenj/tf-compose:latest
     container_name: tf-compose
 #    build:
 #      context: .

@@ -6,6 +6,6 @@ read new_pwd
 export pwd=$new_pwd
 
 # build Docker Image
-docker-compose build
+# docker-compose build
 
 docker-compose up -d
