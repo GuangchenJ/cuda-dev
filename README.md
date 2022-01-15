@@ -38,7 +38,7 @@ Some docker compose for SSH Configurations in JetBrains
 
 ## Description
 
-This image use for TensorFlow development and provides the `SSH` service and the `Jupyter` service. You can ssh into container to use the python3 which in container as Pycharm python interpreter, or you access the jupyter web to dev directly.
+This image is based on [Tensorflow Docker](https://www.tensorflow.org/install/docker) and used for TensorFlow development and provides the `SSH` service and the `Jupyter` service. You can ssh into container to use the python3 which in container as Pycharm python interpreter, or you access the jupyter web to dev directly.
 
 ## Details
 
@@ -47,6 +47,12 @@ We use docker compose to manage the container, the container will expose the ssh
 - `8022` use to expose the ssh port
 - `8888` use to expose the jupyter web port
 - `data` directory maps to `/tf/data` in the container default
+
+## Request
+
+1. Install [Docker](https://docs.docker.com/get-docker/) on your local *host* machine.
+2. For GPU support on Linux, [install NVIDIA Docker support]()
+    - Take note of your Docker version with `docker -v`. Versions **earlier than** 19.03 require nvidia-docker2 and the `--runtime=nvidia` flag. On versions **including and after** 19.03, you will use the `nvidia-container-toolkit` package and the `--gpus all` flag. Both options are documented on the page linked above.
 
 ## How To Use
 
