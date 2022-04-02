@@ -15,7 +15,7 @@ RUN apt update \
 RUN wget https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz \
     && tar -zxvf pkg-config-0.29.2.tar.gz \
     && cd pkg-config-0.29.2/ \
-    && ./configure \
+    && ./configure --with-internal-glib \
     && make \
     && make check \
     && make install \
@@ -55,7 +55,7 @@ FROM nvcr.io/nvidia/tensorrt:22.03-py3
 RUN wget https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz \
     && tar -zxvf pkg-config-0.29.2.tar.gz \
     && cd pkg-config-0.29.2/ \
-    && ./configure \
+    && ./configure --with-internal-glib \
     && make \
     && make check \
     && make install \
