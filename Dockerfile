@@ -10,17 +10,22 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
 
 # Install vim and openssh-server
 RUN apt update \
-    && apt install -y cmake build-essential unzip wget \
+    && apt install -y cmake build-essential unzip wget libgtk-3-dev \
+    && libgtk-3-dev  libavcodec-dev  libavformat-dev libswscale-dev libv4l-dev \
+    && libxvidcore-dev libx264-dev libjpeg-dev libpng-dev libtiff-dev \
+    && gfortran openexr libatlas-base-dev python3-dev python3-numpy \
+    && libtbb2 libtbb-dev libdc1394-22-dev libopenexr-dev \
+    && libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev
     && apt clean
-RUN wget https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz \
-    && tar -zxvf pkg-config-0.29.2.tar.gz \
-    && cd pkg-config-0.29.2/ \
-    && ./configure --with-internal-glib \
-    && make \
-    && make check \
-    && make install \
-    && cd .. \
-    && rm -rf pkg-config-0.29.2
+RUN #wget https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz \
+#    && tar -zxvf pkg-config-0.29.2.tar.gz \
+#    && cd pkg-config-0.29.2/ \
+#    && ./configure --with-internal-glib \
+#    && make \
+#    && make check \
+#    && make install \
+#    && cd .. \
+#    && rm -rf pkg-config-0.29.2
 
 RUN mkdir /tmp/opencv && \
     cd /tmp/opencv && \
@@ -50,21 +55,38 @@ RUN mkdir /tmp/opencv && \
     make install && \
     cd && rm -rf /tmp/opencv
 
+RUN apk del ${DEV_DEPS} && \
+    rm -rf /var/cache/apk/*
+
+ENV PKG_CONFIG_PATH /usr/local/lib64/pkgconfig
+ENV LD_LIBRARY_PATH /usr/local/lib64
+ENV CGO_CPPFLAGS -I/usr/local/include
+ENV CGO_CXXFLAGS "--std=c++1z"
+ENV CGO_LDFLAGS "-L/usr/local/lib -lopencv_core -lopencv_face -lopencv_videoio -lopencv_imgproc -lopencv_highgui -lopencv_imgcodecs -lopencv_objdetect -lopencv_features2d -lopencv_video -lopencv_dnn -lopencv_xfeatures2d -lopencv_plot -lopencv_tracking"
+
+
 FROM nvcr.io/nvidia/tensorrt:22.03-py3
 
-RUN wget https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz \
-    && tar -zxvf pkg-config-0.29.2.tar.gz \
-    && cd pkg-config-0.29.2/ \
-    && ./configure --with-internal-glib \
-    && make \
-    && make check \
-    && make install \
-    && cd .. \
-    && rm -rf pkg-config-0.29.2
+RUN #wget https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz \
+#    && tar -zxvf pkg-config-0.29.2.tar.gz \
+#    && cd pkg-config-0.29.2/ \
+#    && ./configure --with-internal-glib \
+#    && make \
+#    && make check \
+#    && make install \
+#    && cd .. \
+#    && rm -rf pkg-config-0.29.2
 
 COPY --from=builder /usr/local/lib64 /usr/local/lib64
 COPY --from=builder /usr/local/lib64/pkgconfig/opencv4.pc /usr/local/lib64/pkgconfig/opencv4.pc
 COPY --from=builder /usr/local/include/opencv4/opencv2 /usr/local/include/opencv4/opencv2
 
 # Install vim and openssh-server
-RUN apt update && apt install -y vim openssh-server cmake build-essential python3-pip unzip wget && apt clean
+RUN apt update  \
+    && apt install -y vim openssh-server cmake build-essential python3-pip unzip wget libgtk-3-dev \
+    && libgtk-3-dev  libavcodec-dev  libavformat-dev libswscale-dev libv4l-dev \
+    && libxvidcore-dev libx264-dev libjpeg-dev libpng-dev libtiff-dev \
+    && gfortran openexr libatlas-base-dev python3-dev python3-numpy \
+    && libtbb2 libtbb-dev libdc1394-22-dev libopenexr-dev \
+    && libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev
+    && apt clean
