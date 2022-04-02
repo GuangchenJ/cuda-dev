@@ -1,13 +1,13 @@
 version: '3.2'
 
 services:
-  tf-jupyter:
-    image: guangchenj/tf-compose:latest
-    container_name: tf-compose
-#    build:
-#      context: .
-#      dockerfile: ./Dockerfile
-    command: 
+  cuda-devel:
+    image: guangchenj/cuda11.6-devel-ubuntu20.04:latest
+    container_name: cuda11.6-devel-ubuntu20.04
+    privileged: true
+    tty: true
+    stdin_open: true
+    command:
       - sh
       - -c
       - |
@@ -22,15 +22,14 @@ services:
           sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
           # Start the ssh service
           service ssh start
-          # Start jupyter
-          jupyter notebook --allow-root --no-browser --port 8888 --ip=0.0.0.0
+          # keep container running
+          tail -f /dev/null
     restart: always
     shm_size: '8gb'
     volumes:
-      - "/data:/tf/data"
+      - "/data/trt-dev-workspace:/workspace"
     ports:
-      - "8022:22"
-      - "8888:8888"
+      - "8122:22"
     deploy:
       resources:
         reservations:
@@ -41,7 +40,7 @@ services:
     networks:
       net:
         aliases:
-          - tf-compose
+          - cuda11.6-devel-ubuntu20.04
 
 networks:
   net:

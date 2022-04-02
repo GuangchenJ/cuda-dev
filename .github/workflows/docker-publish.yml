@@ -5,7 +5,7 @@ on:
     tags:  [ '*.*.*' ]
 
 env:
-  IMAGE_NAME: tf-compose
+  IMAGE_NAME: cuda11.6-devel-ubuntu20.04
 
 jobs:
   set-matrix:
@@ -66,3 +66,26 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: [ build ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Generate Changelog
+        run: |
+          current_tag=$(git tag -l --format "%(refname:strip=2)" | sort -r | sed -n '1p')
+          last_tag=$(git tag -l --format "%(refname:strip=2)" | sort -r | sed -n '2p')
+          git log --pretty=oneline --pretty=format:"%s%n%b" $last_tag...$current_tag > ${{ github.workspace }}-CHANGELOG.txt
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          body_path: ${{ github.workspace }}-CHANGELOG.txt
+          generate_release_notes: true
