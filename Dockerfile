@@ -5,10 +5,22 @@ ENV TZ=Asia/Shanghai
 ENV OPENCV_VERSION=4.5.5
 
 # Change timezone
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone
 
 # Install vim and openssh-server
- RUN apt update && apt install -y cmake build-essential unzip && apt clean
+RUN apt update \
+    && apt install -y cmake build-essential unzip  \
+    && apt clean
+RUN wget https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz \
+    && tar -zxvf pkg-config-0.29.2.tar.gz \
+    && cd pkg-config-0.29.2/ \
+    && ./configure \
+    && make \
+    && make check \
+    && make install \
+    && cd .. \
+    && rm -rf pkg-config-0.29.2
 
 RUN mkdir /tmp/opencv && \
     cd /tmp/opencv && \
@@ -39,6 +51,16 @@ RUN mkdir /tmp/opencv && \
     cd && rm -rf /tmp/opencv
 
 FROM nvcr.io/nvidia/tensorrt:22.03-py3
+
+RUN wget https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz \
+    && tar -zxvf pkg-config-0.29.2.tar.gz \
+    && cd pkg-config-0.29.2/ \
+    && ./configure \
+    && make \
+    && make check \
+    && make install \
+    && cd .. \
+    && rm -rf pkg-config-0.29.2
 
 COPY --from=builder /usr/local/lib64 /usr/local/lib64
 COPY --from=builder /usr/local/lib64/pkgconfig/opencv4.pc /usr/local/lib64/pkgconfig/opencv4.pc
