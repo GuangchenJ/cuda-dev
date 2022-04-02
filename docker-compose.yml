@@ -1,12 +1,9 @@
 version: '3.2'
 
 services:
-  tf-jupyter:
-    image: guangchenj/cuda11.6.0-devel-ubuntu20.04:latest
-    container_name: cuda11.6.0-devel-ubuntu20.04
-#    build:
-#      context: .
-#      dockerfile: ./Dockerfile
+  cuda-devel:
+    image: guangchenj/cuda11-cudnn8-trt8-devel-ubuntu20.04:latest
+    container_name: cuda11-cudnn8-trt8-devel-ubuntu20.04
     privileged: true
     tty: true
     stdin_open: true
@@ -25,10 +22,12 @@ services:
           sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
           # Start the ssh service
           service ssh start
+          # keep container running
+          tail -f /dev/null
     restart: always
     shm_size: '8gb'
     volumes:
-      - "/data/cuda-dev:/cuda-dev"
+      - "/data/trt-dev-workspace:/workspace"
     ports:
       - "8122:22"
     deploy:
@@ -41,7 +40,7 @@ services:
     networks:
       net:
         aliases:
-          - cuda11.6.0-devel-ubuntu20.04
+          - cuda11-cudnn8-trt8-devel-ubuntu20.04
 
 networks:
   net:
