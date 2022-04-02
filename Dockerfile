@@ -10,7 +10,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
 
 # Install vim and openssh-server
 RUN apt update \
-    && apt install -y cmake build-essential unzip  \
+    && apt install -y cmake build-essential unzip wget \
     && apt clean
 RUN wget https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz \
     && tar -zxvf pkg-config-0.29.2.tar.gz \
@@ -67,4 +67,4 @@ COPY --from=builder /usr/local/lib64/pkgconfig/opencv4.pc /usr/local/lib64/pkgco
 COPY --from=builder /usr/local/include/opencv4/opencv2 /usr/local/include/opencv4/opencv2
 
 # Install vim and openssh-server
-RUN apt update && apt install -y vim openssh-server cmake build-essential python3-pip unzip && apt clean
+RUN apt update && apt install -y vim openssh-server cmake build-essential python3-pip unzip wget && apt clean
