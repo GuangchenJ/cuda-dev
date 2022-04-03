@@ -3,7 +3,7 @@ FROM nvcr.io/nvidia/tensorrt:22.03-py3 AS builder
 # Timezone
 ENV TZ=Asia/Shanghai \
     OPENCV_VERSION=4.5.5 \
-    CMAKE_VERSION=3.23.0
+    CMAKE_VERSION=3.23.0 \
     GRPC_VERSION=1.45.1
 
 # Change timezone
