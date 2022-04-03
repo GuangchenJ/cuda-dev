@@ -1,6 +1,8 @@
-FROM nvcr.io/nvidia/tensorrt:22.03-py3 AS builder
+FROM nvcr.io/nvidia/tensorrt:22.03-py3
 
-# Timezone
+ARG PREFIX=/usr/local
+
+# env
 ENV TZ=Asia/Shanghai \
     OPENCV_VERSION=4.5.5 \
     CMAKE_VERSION=3.23.0 \
@@ -15,19 +17,21 @@ RUN apt update &&  \
     apt autoremove cmake && \
     hash -r && \
     apt upgrade && \
-    apt install -y vim openssh-server cmake build-essential python3-pip unzip wget  \
-    openssl libssl-dev autoconf libtool pkg-config \
-    libgtk-3-dev libgtk-3-dev  \
+    apt install -y vim openssh-server cmake build-essential python3-pip unzip wget  git\
+    openssl libssl-dev autoconf libtool pkg-config automake \
+    libass-dev libfreetype6-dev libgnutls28-dev nasm libvpx-dev libfdk-aac-dev libopus-dev \
+    libgtk-3-dev libgtk-3-dev  libmp3lame-dev libsdl2-dev libva-dev libvdpau-dev libvorbis-dev libxcb1-dev \
+    libxcb-shm0-dev libxcb-xfixes0-dev meson ninja-build texinfo yasm libunistring-dev libaom-dev \
     libavcodec-dev  libavformat-dev libswscale-dev libv4l-dev libxvidcore-dev libx264-dev  \
     libjpeg-dev libpng-dev libtiff-dev gfortran openexr libatlas-base-dev python3-dev python3-numpy \
-    libtbb2 libtbb-dev libdc1394-22-dev libopenexr-dev \
+    libtbb2 libtbb-dev libdc1394-22-dev libopenexr-dev zlib1g-dev \
     libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev && \
-    apt clean
+    apt autoclean
 
 # Download, Compile and Install CMake
 RUN mkdir /tmp/cmake && \
     cd /tmp/cmake && \
-    wget -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}.tar.gz &&\
+    wget -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}.tar.gz && \
     tar -zxf cmake-${CMAKE_VERSION}.tar.gz && \
     cd cmake-${CMAKE_VERSION} && \
     ./bootstrap && \
