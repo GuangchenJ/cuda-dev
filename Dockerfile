@@ -13,11 +13,11 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
 
 # Install some pkg
-RUN apt update &&  \
-    apt autoremove cmake && \
+RUN apt -q update &&  \
+    apt -q autoremove cmake && \
     hash -r && \
-    apt upgrade && \
-    apt install -y vim openssh-server cmake build-essential python3-pip unzip wget  git\
+    apt -q upgrade -y && \
+    apt -q install -y vim openssh-server cmake build-essential python3-pip unzip wget  git\
     openssl libssl-dev autoconf libtool pkg-config automake \
     libass-dev libfreetype6-dev libgnutls28-dev nasm libvpx-dev libfdk-aac-dev libopus-dev \
     libgtk-3-dev libgtk-3-dev  libmp3lame-dev libsdl2-dev libva-dev libvdpau-dev libvorbis-dev libxcb1-dev \
@@ -26,7 +26,7 @@ RUN apt update &&  \
     libjpeg-dev libpng-dev libtiff-dev gfortran openexr libatlas-base-dev python3-dev python3-numpy \
     libtbb2 libtbb-dev libdc1394-22-dev libopenexr-dev zlib1g-dev \
     libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev && \
-    apt autoclean
+    apt -q autoclean
 
 # Download, Compile and Install CMake
 RUN mkdir /tmp/cmake && \
