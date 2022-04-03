@@ -12,11 +12,11 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
 
 # Install some pkg
 RUN apt update &&  \
-    apt remove --purge cmake && \
-    hash -r \
+    apt autoremove cmake && \
+    hash -r && \
     apt upgrade && \
     apt install -y vim openssh-server cmake build-essential python3-pip unzip wget  \
-    openssl libssl-dev autoconf libtool pkg-config\
+    openssl libssl-dev autoconf libtool pkg-config \
     libgtk-3-dev libgtk-3-dev  \
     libavcodec-dev  libavformat-dev libswscale-dev libv4l-dev libxvidcore-dev libx264-dev  \
     libjpeg-dev libpng-dev libtiff-dev gfortran openexr libatlas-base-dev python3-dev python3-numpy \
