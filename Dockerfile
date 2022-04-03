@@ -41,8 +41,7 @@ RUN mkdir /tmp/cmake && \
 # Download, Compile and Install OpenCV
 RUN mkdir /tmp/opencv && \
     cd /tmp/opencv && \
-    wget -q -O opencv.zip https://github.com/ls \
-    opencv/opencv/archive/${OPENCV_VERSION}.zip && \
+    wget -q -O opencv.zip https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip && \
     unzip -q opencv.zip && \
     wget -q -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/${OPENCV_VERSION}.zip && \
     unzip -q opencv_contrib.zip && \
@@ -51,7 +50,6 @@ RUN mkdir /tmp/opencv && \
     -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=/usr/local \
     -D OPENCV_EXTRA_MODULES_PATH=/tmp/opencv/opencv_contrib-${OPENCV_VERSION}/modules \
-#    -D WITH_FFMPEG=YES \
     -D INSTALL_C_EXAMPLES=NO \
     -D INSTALL_PYTHON_EXAMPLES=NO \
     -D BUILD_ANDROID_EXAMPLES=NO \
