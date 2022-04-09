@@ -27,6 +27,7 @@ services:
     restart: always
     shm_size: '8gb'
     volumes:
+      - "~/.ssh:/root/.ssh"
       - "/data/trt-dev-workspace:/workspace"
     ports:
       - "8122:22"
